@@ -4,19 +4,19 @@ import colors from '../util/colors'
 import { Picker } from '@react-native-picker/picker';
 
 export default function form(props) {
-  const {setCapital,setInteres,setMonths} = props
+  const {setCapital,setInteres,setMonths, enviar} = props
 
   const [selectedMonths, setSelectedMonths] = useState();
   return (
     <View style={styles.viewForm}>
       <View style={styles.viewInput}>
         <TextInput
-          onChange={e => setCapital(e.nativeEvent.text)}
+          onChange={e => (setCapital(e.nativeEvent.text))}
           placeholder="cantidad"
           keyboardType='numeric'
           style={styles.input}></TextInput>
         <TextInput
-          onChange={e => setInteres(e.nativeEvent.text)}
+          onChange={e => (setInteres(e.nativeEvent.text))}
           placeholderTextColor='red'
           placeholder="Interes %"
           keyboardType='numeric'
@@ -33,6 +33,7 @@ export default function form(props) {
             onValueChange={(itemValue, itemIndex) =>{
               setSelectedMonths(itemValue)
               setMonths(itemValue)
+              
             }
             }>
             <Picker.Item label="3 meses" value={3} />
@@ -53,32 +54,20 @@ export default function form(props) {
   )
 }
 
-function form2() {
-  return (
-    <View>
-      <TextInput
-        placeholder="Cantidad a pedir"
-        keyboardType='numeric'></TextInput>
-
-
-
-    </View>
-  )
-}
 
 
 
 const styles = StyleSheet.create({
   viewForm: {
     backgroundColor:colors.PRIMARY_COLOR_DARK,
-    height:190,
-    width:'85%',
+    height:180,
+    width:'88%',
     paddingHorizontal:50,
     paddingTop:10,
     borderRadius:30,
     justifyContent:'center',
     position:'absolute',
-    bottom:-100,
+    bottom:-0,
     flexDirection: 'column',
 
   },

@@ -2,22 +2,37 @@ import { StatusBar } from 'expo-status-bar';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import colors from './src/util/colors';
 import Form from './src/components/Form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Footer from './src/components/Footer';
+import Body from './src/components/Body';
 export default function App() {
   const [capital,setCapital] = useState(null)
   const [interes,setInteres] = useState(null)
   const [months,setMonths] = useState(null)
-
+  const [total,setTotal] = useState({})
+  const [errorMessage,setErrorMessage] = useState('')
+  useEffect(() => {  
+    enviar() 
+  }, [capital,interes,months])
   const enviar = () =>{
+    setTotal({})
+    setErrorMessage('')
     if (!capital) {
-      console.log('Favor de ingresar un capital')
+      setErrorMessage('Favor de ingresar un capital')
     } else if (!interes) { 
-        console.log('Favor de ingresar un interes')
+        setErrorMessage('Favor de ingresar un interes')
       } else  if (!months) {
-          console.log('Favor de ingresar los meses')
+          setErrorMessage('Favor de ingresar los meses')
         }else{
-          console.log('todo bien...')
+          
+          const i = interes/100
+          const fee = capital / ((1-Math.pow(i+1,-months))/i)
+          setTotal({ 
+            monthlyFee: fee.toFixed(2),
+            totalPayable: (fee * months).toFixed(2)
+          })
+          console.log(total)
+
         }
       }
       
@@ -33,13 +48,17 @@ export default function App() {
 
         <Form setCapital={setCapital}
               setInteres={setInteres}
-              setMonths={setMonths}/>
-      
+              setMonths={setMonths}
+              enviar={enviar}/>
+              
       </View>
 
-      <View style={ styles.body}>
-        <Text>body</Text>
-      </View>
+      <Body 
+      errorMessage={errorMessage}
+      total = {total} 
+      capital={capital} 
+      interes={interes}
+      months ={months}/>
       
       <Footer enviar={enviar}/>
     
@@ -57,7 +76,7 @@ const styles = StyleSheet.create({
   head: {
     
     backgroundColor: colors.PRIMARY_COLOR,
-    height:200,
+    height:250,
     borderBottomRightRadius:30,
     borderBottomLeftRadius:30,
     alignItems:'center',
@@ -69,15 +88,6 @@ const styles = StyleSheet.create({
     marginTop:25,
 
   },
-  footer: {
-    fontSize:25,
-    fontWeight:'bold',
-    color:'#fff',
-    marginTop:25,
-    height:50,
-  },
-  body:{
-    height:10,
-  }
+  
 
 });
